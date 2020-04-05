@@ -21,10 +21,14 @@ instagram_username: regimeketo
 twitter_username: regimeketo
 youtube_username: Régime Keto
 youtube_channel: channel/UCVtDhoTk3c4ojEhlrIqilNQ
+    # youtube: jekyll
+    # youtube_channel: UC8CXR0-3I70i1tfPg1PAE1g
+    # youtube_channel_name: CloudCannon
 pinterest_username: regimeketo
 github_username: regimeketo
 rss: News Feed
-description: >- # this means to ignore newlines until "baseurl:"
+
+description: >-
   Premier site francophone entièrement dédié à la perte de poids
   durable par la diète cétogène
 baseurl: "" # the subpath of your site, e.g. /blog
@@ -51,8 +55,15 @@ plugins:
 collections:
   recipes:
     output: true
+  pages:
+    output: true
 
 defaults:
+  - scope:
+      path: ""
+      type: "pages"
+    values:
+      layout: "page"
   - scope:
       path: ""
       type: "recipes"

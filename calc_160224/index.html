@@ -1,0 +1,145 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>Macro Calculator</title>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <link rel="icon" href="data:;base64,iVBORw0KGgo=">
+        <style>
+.calculator {margin:0px;padding:0px;}
+.error {color: red;}
+td, th {vertical-align: top;}
+th, td {padding: 5px;}
+table.macros {border-collapse: collapse; margin-top: 20px;}
+table.macros td {border: 1px solid black;}
+input[type='number'] {width: 5em;}
+@media print {
+    ul {display: none;}
+    table {border-collapse: collapse;}
+    table, td, th {border: 1px solid black;}
+}
+        </style>
+        <script src="lib/jquery-2.1.4.js"></script>
+        <script src="lib/jquery.cookie.js"></script>
+        <script src="lib/Chart.min.js"></script>
+        <script src="calc-min.js"></script>
+    </head>
+    <body>
+        <form id="basic_form">
+            <p>Nous utilisons la formule
+                <a href="http://ajcn.nutrition.org/content/51/2/241.abstract" target="_blank">Mifflin - St Jeor</a>
+                qui défini la Dépense Energétique au Repos(DER),
+                qui est plus importante que le rythme métabolique de base (BMR)
+                qui mesure les besoins énérgetiques minimaux dans des conditions spéciales.</p>
+            <div>
+                <span style="display: inline-block; width:80px;">Sexe:</span>
+                <input type="radio" name="gender" value=female checked class="basic">
+                <span>Féminin</span>
+                <input type="radio" name="gender" value=male class="basic">
+                <span>Masculin</span>
+            </div>
+            <div>
+                <span style="display: inline-block; width:80px;">Poids:</span>
+                <input type="number" name="weight" step="0.5" min="0" class="basic">
+                <span>kg</span>
+            </div>
+            <div>
+                <span style="display: inline-block; width:80px;">Taille:</span>
+                <input type="number" name="height" step="0.5" min="0" class="basic">
+                <span>cm</span>
+            </div>
+            <div>
+                <span style="display: inline-block; width:80px;">Age:</span>
+                <input type="number" name="age" step="0.5" min="0" class="basic">
+                <span>ans</span>
+            </div>
+            <p class="show_if_ree">Votre DER est de <span class="ree">???</span> kcal / jour</p>
+            <div class="show_if_ree">
+                <p>Renseignez votre niveau d'activité pour déterminer votre Dépense Energétique Quotidienne Totale (DEQT).</p>
+                <div>
+                    <span style="display: inline-block; width:80px;">Exercise:</span>
+                    <select name="exercise" class="basic">
+                        <option value="-1"></option>
+                        <option value="0">Sedentaire</option>
+                        <option value="1">Légérement actif</option>
+                        <option value="2">Modérément active</option>
+                        <option value="3">Très actif</option>
+                        <option value="4">Extrêmement actif</option>
+                    </select>
+                </div>
+                <p class="show_if_tdr">Votre DEQT est de <span class="tdr">???</span> kcal</p>
+            </div>
+            <div class="show_if_tdr">
+                <p>Combien de glucides allez-vous consommer?
+                    20 gr par jour est un bon départ tandis que plus de 50 gr par jour
+                    pourrait bloquer la cétose nutritionnelle.</p>
+                <span style="display: inline-block; width:80px;">Glucides:</span>
+                <input type="number" name="carbs_g" step="1" min="0" class="basic"> g
+            </div>
+            <div class="show_if_carbs_kcal">
+                <p>Estimez ou mesurez votre masse grasse
+                    (ex. <a href="http://www.calculator.net/body-fat-calculator.html" target="_blank">calculateur</a>,
+                    <a href="http://www.builtlean.com/2012/09/24/body-fat-percentage-men-women/" target="_blank">photos de comparaison</a>).
+                    Votre taux de masse grasse nous aidera à (1) calculer vos besoins en protéines,
+                    et (2) à savoir combien vous pourriez bruler de calories à partir de vos réserves de gras."</p>
+                <span style="display: inline-block; width:80px;">Masse grasse:</span>
+                <input type="number" name="body_fat_pct" step="1" min="0" class="basic"> %
+            </div>
+            <div class="show_if_body_fat_kg">
+                <p>L'apport en protéines doit être limité entre
+                    <span class="protein_min_g">???</span> g et
+                    <span class="protein_max_g">???</span> g,
+                    nous vous suggérons d'en consommer
+                    <span class="protein_exercise"></span> g
+                    sur la base de votre activité physique.</p>
+                <span style="display: inline-block; width:80px;">Protéines:</span>
+                <input type="number" name="protein_g" step="1" min="0" class="basic"> g
+            </div>
+            <div class="show_if_protein_kcal">
+                <p>Votre apport énergétique quotidien devrait se situer entre
+                    <span class="kcal_min">???</span> kcal
+                    (un déficit de <span class="deficit_max">???</span>%)
+                    pour une perte de poids maximale et
+                    <span class="kcal_max">???</span> kcal (un déficit de 0%)
+                    pour maintenir votre poids.</p>
+                <span style="display: inline-block; width:80px;">Déficit énergétique:</span>
+                <input type="number" name="deficit" step="1" min="0" class="basic"> %
+            </div>
+        </form>
+        <div class="show_if_fat_kcal">
+            <p>Vos besoins quotidiens en macronutriments sont:</p>
+            <table class="macros">
+                <tr>
+                    <td style="background-color:#FDB45C">Glucides</td>
+                    <td><span class="carbs_kcal">???</span> kcal</td>
+                    <td><span class="carbs_kcal_pct">???</span> %</td>
+                    <td><span class="carbs_g">???</span> g</td>
+                </tr>
+                <tr>
+                    <td style="background-color:#F7464A">Protéines</td>
+                    <td><span class="protein_kcal">???</span> kcal</td>
+                    <td><span class="protein_kcal_pct">???</span> %</td>
+                    <td><span class="protein_g">???</span> g</td>
+                </tr>
+                <tr>
+                    <td style="background-color:#46BFBD">Lipides</td>
+                    <td><span class="fat_kcal">???</span> kcal</td>
+                    <td><span class="fat_kcal_pct">???</span> %</td>
+                    <td><span class="fat_g">???</span> g</td>
+                </tr>
+                <tr>
+                    <td>Total</td>
+                    <td><span class="actual_kcal">???</span> kcal</td>
+                    <td>&nbsp;</td>
+                    <td>&nbsp;</td>
+                </tr>
+                <tr>
+                    <td id="canvas-holder" colspan="4" style="text-align:center">
+                        <canvas id="chart-area" width="200" height="200"></canvas>
+                    </td>                    
+                </tr>
+            </table>
+        </div>
+        <p class="error"></p>
+    </body>
+</html>

@@ -1,0 +1,13 @@
+---
+layout: page
+title: Pages
+---
+
+<ul class="pages">
+  {%- for my_page in site.pages -%}
+    <li>
+      <a href="{{ my_page.url }}" title="{{ my_page.title }}">{{ my_page.title }}</a>
+      {{ my_page.excerpt }}
+    </li>
+  {%- endfor -%}
+</ul>

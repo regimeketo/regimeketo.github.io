@@ -1,13 +1,9 @@
 ---
-# Feel free to add content and custom Front Matter to this file.
-# To modify the layout, see https://jekyllrb.com/docs/themes/#overriding-theme-defaults
-
+title: Bienvenue à regimeketo.com
 layout: home
 ---
 
-## TODO
-  - create new jekyll site with blog - DONE
-  - add _recette and two recipes in md format
-  - add _page for about and other special pages
-  - add _data for recipes, images, videos, etc
-  - add current calculator 
+The home page is not ready. Currently it lists the blog posts and
+reverse date order. I should probably have a short section on what
+is keto and why it is relevant, 1 to 3 of the most recent blog posts,
+or recently changed or interesting pages.

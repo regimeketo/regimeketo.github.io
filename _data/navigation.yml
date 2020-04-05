@@ -1,6 +1,12 @@
-- name: Home
-  link: /
-- name: About
-  link: /about.html
-- name: Recipes
-  link: /recipes.html
+menu_title: Menu Pricipal
+menu:
+  - title: Blog
+    url: /blog
+  - title: Pages
+    url: /pages
+  - title: Recettes
+    url: /recipes
+  - title: Calc
+    url: /pages/calculateur-keto
+  - title: About
+    url: /about
