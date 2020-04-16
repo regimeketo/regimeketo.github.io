@@ -6,13 +6,7 @@ title: Recipes
 <ul>
   {% for recipe in site.recipes %}
     <li>
-      <a href="{{ recipe.url }}">{{ recipe.name }}</a>
+      <a href="{{ recipe.url }}">{{ recipe.title }}</a>
     </li>
   {% endfor %}
-</ul>
-
-<ul>
-  <li>heading should be set from title</li>
-  <li>later on need tags for recettes (not categories these are rather inflexible)</li>
-  <li>add extra for each recette</li>
 </ul>
